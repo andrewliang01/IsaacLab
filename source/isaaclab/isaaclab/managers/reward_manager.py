@@ -147,6 +147,11 @@ class RewardManager(ManagerBase):
                 continue
             # compute term's value
             value = term_cfg.func(self._env, **term_cfg.params) * term_cfg.weight * dt
+            # 检查输出是否有nan或者inf
+            if torch.isnan(value).any():
+                raise RuntimeError(f"❌ Reward '{name}' contains NaN ")
+            if torch.isinf(value).any():
+                raise RuntimeError(f"❌ Reward '{name}' contains Inf ")
             # update total reward
             self._reward_buf += value
             # update episodic sum
