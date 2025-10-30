@@ -21,6 +21,7 @@ Guidelines for modifications:
 
 * Antonio Serrano-Muñoz
 * Ben Johnston
+* Clemens Schwarke
 * David Hoeller
 * Farbod Farshidian
 * Hunter Hansen
@@ -52,9 +53,9 @@ Guidelines for modifications:
 * Brian Bingham
 * Cameron Upright
 * Calvin Yu
+* Cathy Y. Li
 * Cheng-Rong Lai
 * Chenyu Yang
-* Clemens Schwarke
 * Connor Smith
 * CY (Chien-Ying) Chen
 * David Yang
@@ -67,6 +68,7 @@ Guidelines for modifications:
 * Gary Lvov
 * Giulio Romualdi
 * Haoran Zhou
+* Harsh Patel
 * HoJin Jeon
 * Hongwei Xiong
 * Hongyu Li
@@ -87,6 +89,7 @@ Guidelines for modifications:
 * Kourosh Darvish
 * Kousheek Chakraborty
 * Lionel Gulich
+* Lotus Li
 * Louis Le Lay
 * Lorenz Wellhausen
 * Lukas Fröhlich
@@ -99,6 +102,8 @@ Guidelines for modifications:
 * Miguel Alonso Jr
 * Mingyu Lee
 * Muhong Guo
+* Narendra Dahile
+* Neel Anand Jawale
 * Nicola Loi
 * Norbert Cygiert
 * Nuoyan Chen (Alvin)
@@ -108,8 +113,10 @@ Guidelines for modifications:
 * Özhan Özen
 * Patrick Yin
 * Peter Du
+* Philipp Reist
 * Pulkit Goyal
 * Qian Wan
+* Qingyang Jiang
 * Qinxi Yu
 * Rafael Wiltz
 * Renaud Poncelet
@@ -117,6 +124,7 @@ Guidelines for modifications:
 * Ritvik Singh
 * Rosario Scalise
 * Ryley McCarroll
+* Sergey Grizan
 * Shafeef Omar
 * Shaoshu Su
 * Shaurya Dewan
@@ -124,12 +132,14 @@ Guidelines for modifications:
 * Shundo Kishi
 * Stefan Van de Mosselaer
 * Stephan Pleines
+* Tiffany Chen
 * Tyler Lum
 * Victor Khaustov
 * Virgilio Gómez Lambo
 * Vladimir Fokow
 * Wei Yang
 * Xavier Nal
+* Xinjie Yao
 * Xinpeng Liu
 * Yang Jin
 * Yanzi Zhu
@@ -137,9 +147,11 @@ Guidelines for modifications:
 * Yohan Choi
 * Yujian Zhang
 * Yun Liu
+* Zehao Wang
 * Ziqi Fan
 * Zoe McCarthy
 * David Leon
+* Song Yi
 
 ## Acknowledgements
 

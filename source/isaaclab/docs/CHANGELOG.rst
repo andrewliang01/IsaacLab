@@ -1,6 +1,268 @@
 Changelog
 ---------
 
+0.47.3 (2025-10-22)
+~~~~~~~~~~~~~~~~~~~
+
+Changed
+^^^^^^^
+
+* Fixed the data type conversion in :class:`~isaaclab.sensors.tiled_camera.TiledCamera` to
+  support the correct data type when converting from numpy arrays to warp arrays on the CPU.
+
+
+0.47.2 (2025-10-17)
+~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added :meth:`~isaaclab.sim.utils.resolve_prim_pose` to resolve the pose of a prim with respect to another prim.
+* Added :meth:`~isaaclab.sim.utils.resolve_prim_scale` to resolve the scale of a prim in the world frame.
+
+
+0.47.1 (2025-10-17)
+~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Suppressed yourdfpy warnings when trying to load meshes from hand urdfs in dex_retargeting. These mesh files are not
+  used by dex_retargeting, but the parser is incorrectly configured by dex_retargeting to load them anyway which results
+  in warning spam.
+
+
+0.47.0 (2025-10-14)
+~~~~~~~~~~~~~~~~~~~
+
+Changed
+^^^^^^^
+
+* Removed pickle utilities for saving and loading configurations as pickle contains security vulnerabilities in its APIs.
+  Configurations can continue to be saved and loaded through yaml.
+
+
+0.46.11 (2025-10-15)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added support for modifying the :attr:`/rtx/domeLight/upperLowerStrategy` Sim rendering setting.
+
+
+0.46.10 (2025-10-13)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added ARM64 architecture for pink ik and dex-retargetting setup installations.
+
+
+0.46.9 (2025-10-09)
+~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Fixed :meth:`~isaaclab.devices.keyboard.se3_keyboard.Se3Keyboard.__del__` to use the correct method name
+  for unsubscribing from keyboard events "unsubscribe_to_keyboard_events" instead of "unsubscribe_from_keyboard_events".
+
+
+0.46.8 (2025-10-02)
+~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Fixed scaling factor for retargeting of GR1T2 hand.
+
+
+0.46.7 (2025-09-30)
+~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Fixed finger joint indices with manus extension.
+
+
+0.46.6 (2025-09-30)
+~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added argument :attr:`traverse_instance_prims` to :meth:`~isaaclab.sim.utils.get_all_matching_child_prims` and
+  :meth:`~isaaclab.sim.utils.get_first_matching_child_prim` to control whether to traverse instance prims
+  during the traversal. Earlier, instanced prims were skipped since :meth:`Usd.Prim.GetChildren` did not return
+  instanced prims, which is now fixed.
+
+Changed
+^^^^^^^
+
+* Made parsing of instanced prims in :meth:`~isaaclab.sim.utils.get_all_matching_child_prims` and
+  :meth:`~isaaclab.sim.utils.get_first_matching_child_prim` as the default behavior.
+* Added parsing of instanced prims in :meth:`~isaaclab.sim.utils.make_uninstanceable` to make all prims uninstanceable.
+
+
+0.46.5 (2025-10-14)
+~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Exposed parameter :attr:`~isaaclab.sim.spawners.PhysxCfg.solve_articulation_contact_last`
+  to configure USD attribute ``physxscene:solveArticulationContactLast``. This parameter may
+  help improve solver stability with grippers, which previously required reducing simulation time-steps.
+  :class:`~isaaclab.sim.spawners.PhysxCfg`
+
+
+0.46.4 (2025-10-06)
+~~~~~~~~~~~~~~~~~~~
+
+Changed
+^^^^^^^
+
+* Fixed :attr:`~isaaclab.sim.simulation_context.SimulationContext.device` to return the device from the configuration.
+  Previously, it was returning the device from the simulation manager, which was causing a performance overhead.
+
+
+0.46.3 (2025-09-17)
+~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Modified setter to support for viscous and dynamic joint friction coefficients in articulation based on IsaacSim 5.0.
+* Added randomization of viscous and dynamic joint friction coefficients in event term.
+
+
+0.46.2 (2025-09-13)
+~~~~~~~~~~~~~~~~~~~
+
+Changed
+^^^^^^^
+
+* Fixed missing actuator indices in :meth:`~isaaclab.envs.mdp.events.randomize_actuator_gains`
+
+
+0.46.1 (2025-09-10)
+~~~~~~~~~~~~~~~~~~~
+
+Changed
+^^^^^^^
+
+* Moved IO descriptors output directory to a subfolder under the task log directory.
+
+
+0.46.0 (2025-09-06)
+~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added argument :attr:`traverse_instance_prims` to :meth:`~isaaclab.sim.utils.get_all_matching_child_prims` and
+  :meth:`~isaaclab.sim.utils.get_first_matching_child_prim` to control whether to traverse instance prims
+  during the traversal. Earlier, instanced prims were skipped since :meth:`Usd.Prim.GetChildren` did not return
+  instanced prims, which is now fixed.
+
+Changed
+^^^^^^^
+
+* Made parsing of instanced prims in :meth:`~isaaclab.sim.utils.get_all_matching_child_prims` and
+  :meth:`~isaaclab.sim.utils.get_first_matching_child_prim` as the default behavior.
+* Added parsing of instanced prims in :meth:`~isaaclab.sim.utils.make_uninstanceable` to make all prims uninstanceable.
+
+
+0.45.16 (2025-09-06)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added teleoperation environments for Unitree G1. This includes an environment with lower body fixed and upper body
+  controlled by IK, and an environment with the lower body controlled by a policy and the upper body controlled by IK.
+
+
+0.45.15 (2025-09-05)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added action terms for using RMPFlow in Manager-Based environments.
+
+
+0.45.14 (2025-09-08)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added :class:`~isaaclab.ui.xr_widgets.TeleopVisualizationManager` and :class:`~isaaclab.ui.xr_widgets.XRVisualization`
+  classes to provide real-time visualization of teleoperation and inverse kinematics status in XR environments.
+
+
+0.45.13 (2025-09-08)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added :class:`~isaaclab.devices.openxr.manus_vive.ManusVive` to support teleoperation with Manus gloves and Vive trackers.
+
+
+0.45.12 (2025-09-05)
+~~~~~~~~~~~~~~~~~~~~
+
+Added
+^^^^^
+
+* Added :class:`~isaaclab.envs.mdp.actions.SurfaceGripperBinaryAction` for supporting surface grippers in Manager-Based workflows.
+
+Changed
+^^^^^^^
+
+* Added AssetBase inheritance for :class:`~isaaclab.assets.surface_gripper.SurfaceGripper`.
+
+
+0.45.11 (2025-09-04)
+~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Fixes a high memory usage and perf slowdown issue in episode data by removing the use of torch.cat when appending to the episode data
+  at each timestep. The use of torch.cat was causing the episode data to be copied at each timestep, which causes high memory usage and
+  significant performance slowdown when recording longer episode data.
+* Patches the configclass to allow validate dict with key is not a string.
+
+Added
+^^^^^
+
+* Added optional episode metadata (ep_meta) to be stored in the HDF5 data attributes.
+* Added option to record data pre-physics step.
+* Added joint_target data to episode data. Joint target data can be optionally recorded by the user and replayed to improve
+  determinism of replay.
+
+
+0.45.10 (2025-09-02)
+~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+^^^^^
+
+* Fixed regression in reach task configuration where the gripper command was being returned.
+* Added :attr:`~isaaclab.devices.Se3GamepadCfg.gripper_term` to :class:`~isaaclab.devices.Se3GamepadCfg`
+  to control whether the gamepad device should return a gripper command.
+* Added :attr:`~isaaclab.devices.Se3SpaceMouseCfg.gripper_term` to :class:`~isaaclab.devices.Se3SpaceMouseCfg`
+  to control whether the spacemouse device should return a gripper command.
+* Added :attr:`~isaaclab.devices.Se3KeyboardCfg.gripper_term` to :class:`~isaaclab.devices.Se3KeyboardCfg`
+  to control whether the keyboard device should return a gripper command.
+
+
 0.45.9 (2025-08-27)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -43,7 +305,7 @@ Added
 
 
 0.45.6 (2025-08-22)
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Fixed
 ^^^^^
@@ -52,7 +314,7 @@ Fixed
 
 
 0.45.5 (2025-08-21)
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Fixed
 ^^^^^
@@ -64,7 +326,7 @@ Fixed
 
 
 0.45.4 (2025-08-21)
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Added
 ^^^^^
@@ -149,9 +411,9 @@ Fixed
 Fixed
 ^^^^^
 
-* Fixed the old termination manager in :class:`~isaaclab.managers.TerminationManager` term_done logging that logs the
-instantaneous term done count at reset. This let to inaccurate aggregation of termination count, obscuring the what really
-happeningduring the traing. Instead we log the episodic term done.
+* Fixed the old termination manager in :class:`~isaaclab.managers.TerminationManager` term_done logging that
+  logs the instantaneous term done count at reset. This let to inaccurate aggregation of termination count,
+  obscuring the what really happening during the training. Instead we log the episodic term done.
 
 
 0.44.9 (2025-07-30)
@@ -4872,8 +5134,7 @@ Added
 ~~~~~~~~~~~~~~~~~~
 
 * Added the :class:`isaaclab.app.AppLauncher` class to allow controlled instantiation of
-  the `SimulationApp <https://docs.omniverse.nvidia.com/py/isaacsim/source/isaacsim.simulation_app/docs/index.html>`_
-  and extension loading for remote deployment and ROS bridges.
+  the SimulationApp and extension loading for remote deployment and ROS bridges.
 
 Changed
 ^^^^^^^
