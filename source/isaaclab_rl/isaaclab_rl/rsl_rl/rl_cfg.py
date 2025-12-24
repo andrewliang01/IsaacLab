@@ -196,7 +196,7 @@ class RslRlBaseRunnerCfg:
     ``{time-stamp}_{run_name}``.
     """
 
-    logger: Literal["tensorboard", "neptune", "wandb"] = "tensorboard"
+    logger: Literal["tensorboard", "neptune", "wandb", "swanlab"] = "tensorboard"
     """The logger to use. Default is tensorboard."""
 
     neptune_project: str = "isaaclab"
@@ -204,6 +204,9 @@ class RslRlBaseRunnerCfg:
 
     wandb_project: str = "isaaclab"
     """The wandb project name. Default is "isaaclab"."""
+
+    swanlab_project: str = "isaaclab"
+    """The swanlab project name. Default is "isaaclab"."""
 
     resume: bool = False
     """Whether to resume a previous training. Default is False.
