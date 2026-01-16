@@ -314,3 +314,15 @@ class MeshRepeatedCylindersTerrainCfg(MeshRepeatedObjectsTerrainCfg):
 
     object_params_end: ObjectCfg = MISSING
     """The box curriculum parameters at the end of the curriculum."""
+
+
+@configclass
+class MeshSquareGapTerrainCfg(SubTerrainBaseCfg):
+    """
+    Configuration for a single square gap terrain (moat).
+    单一方形沟壑地形（护城河状）。
+    """
+    function = mesh_terrains.square_gap_terrain
+    gap_width_range: tuple[float, float] = (0.3, 0.8)
+    gap_depth_range: tuple[float, float] = (0.5, 1.2)
+    platform_width: float = 1.0

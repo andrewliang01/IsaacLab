@@ -12,7 +12,7 @@ import scipy.spatial.transform as tf
 import torch
 import trimesh
 from typing import TYPE_CHECKING
-
+from isaaclab.terrains.trimesh.utils import make_box
 from .utils import *  # noqa: F401, F403
 from .utils import make_border, make_plane
 
@@ -857,4 +857,84 @@ def repeated_objects_terrain(
     platform = trimesh.creation.box(dim, trimesh.transformations.translation_matrix(pos))
     meshes_list.append(platform)
 
+    return meshes_list, origin
+
+def square_gap_terrain(
+        difficulty: float, cfg: mesh_terrains_cfg.MeshSquareGapTerrainCfg
+) -> tuple[list[trimesh.Trimesh], np.ndarray]:
+    """
+    生成单一方形沟壑地形。
+    采用分层堆叠法，确保无破面、无漏底。
+    """
+    import random
+    # 沟壑尺寸
+    gap_w = random.uniform(cfg.gap_width_range[0], cfg.gap_width_range[1])
+    gap_d = random.uniform(cfg.gap_depth_range[0], cfg.gap_depth_range[1])
+    size_x, size_y = cfg.size
+    center_x, center_y = 0.5 * size_x, 0.5 * size_y
+    meshes_list = []
+    # 基础底部深度 (扎根地下5米)
+    BASE_BOTTOM = -5.0
+    # 沟底的高度 (也是基座的顶部高度)
+    trench_floor_z = -gap_d
+    # ----------------------------------------------------------------------
+    # 基地层 - 充当沟壑的底部
+    # ----------------------------------------------------------------------
+    # 这是一个铺满整个地图的大方块，从 -5.0 到 -gap_depth
+    # 这样无论哪里有空隙，下面都有底
+    base_height = trench_floor_z - BASE_BOTTOM
+    if base_height > 0:
+        base_dim = (size_x, size_y, base_height)
+        base_pos = (center_x, center_y, BASE_BOTTOM + base_height / 2)
+        base_block = trimesh.creation.box(base_dim, trimesh.transformations.translation_matrix(base_pos))
+        meshes_list.append(base_block)
+    # ----------------------------------------------------------------------
+    # 顶层 - 构成行走表面
+    # ----------------------------------------------------------------------
+    # 这一层的所有方块高度范围是：[-gap_depth, 0.0]
+    top_layer_height = 0.0 - trench_floor_z
+    top_layer_z_center = trench_floor_z + top_layer_height / 2
+    # --- 中心平台 ---
+    plat_w = cfg.platform_width
+    plat_dim = (plat_w, plat_w, top_layer_height)
+    plat_pos = (center_x, center_y, top_layer_z_center)
+    center_block = trimesh.creation.box(plat_dim, trimesh.transformations.translation_matrix(plat_pos))
+    meshes_list.append(center_block)
+    # --- 外圈地面---
+    # 我们需要用4个长方体围成一圈，填满从"沟壑外沿"到"地图边缘"的空间
+    # 计算沟壑外沿的尺寸 (即内洞的大小)
+    inner_w = plat_w + 2 * gap_w  # X轴方向的内径
+    inner_l = plat_w + 2 * gap_w  # Y轴方向的内径 (假设是正方形沟)
+    # 如果沟太宽超出了地图，就不生成外圈了
+    if inner_w < size_x and inner_l < size_y:
+        # 计算上下左右四个板块的尺寸
+        # 上下板块 (Top/Bottom)：横跨整个 X 轴
+        # 左右板块 (Left/Right)：只填补中间 Y 轴剩余的部分
+        # 顶部板块 (Y轴正方向)
+        top_h = (size_y - inner_l) / 2
+        top_dim = (size_x, top_h, top_layer_height)
+        top_y = center_y + inner_l / 2 + top_h / 2
+        top_block = trimesh.creation.box(top_dim, trimesh.transformations.translation_matrix(
+            (center_x, top_y, top_layer_z_center)))
+        meshes_list.append(top_block)
+        # 底部板块 (Y轴负方向)
+        bot_dim = top_dim  # 对称
+        bot_y = center_y - inner_l / 2 - top_h / 2
+        bot_block = trimesh.creation.box(bot_dim, trimesh.transformations.translation_matrix(
+            (center_x, bot_y, top_layer_z_center)))
+        meshes_list.append(bot_block)
+        # 左侧板块 (X轴负方向)
+        left_w = (size_x - inner_w) / 2
+        left_dim = (left_w, inner_l, top_layer_height)  # 注意Y轴只填中间部分
+        left_x = center_x - inner_w / 2 - left_w / 2
+        left_block = trimesh.creation.box(left_dim, trimesh.transformations.translation_matrix(
+            (left_x, center_y, top_layer_z_center)))
+        meshes_list.append(left_block)
+        # 右侧板块 (X轴正方向)
+        right_dim = left_dim  # 对称
+        right_x = center_x + inner_w / 2 + left_w / 2
+        right_block = trimesh.creation.box(right_dim, trimesh.transformations.translation_matrix(
+            (right_x, center_y, top_layer_z_center)))
+        meshes_list.append(right_block)
+    origin = np.array([center_x, center_y, 0.0])
     return meshes_list, origin
