@@ -397,6 +397,58 @@ def test_repeated_objects_terrain(
     if not headless:
         trimesh.viewer.SceneViewer(scene=scene, caption=f"Repeated Objects Terrain: {object_type}")
 
+def test_square_gap_terrain(difficulty: float, output_dir: str, headless: bool):
+    """Test the Square Gap (Moat) Terrain."""
+    print(f"Generating Square Gap Terrain with difficulty {difficulty}...")
+
+    # 1. Define configuration
+    cfg = mesh_gen.MeshSquareGapTerrainCfg(
+        size=(8.0, 8.0),
+        # Platform width: 1.2m
+        platform_width=1.2,
+        # Gap width: Random between 0.3m and 0.8m
+        gap_width_range=(0.3, 0.8),
+        # Gap depth: Random between 0.5m and 2.0m
+        gap_depth_range=(0.5, 2.0),
+    )
+
+    # 2. Generate the terrain
+    # Note: We call cfg.function directly as per the Isaac Lab pattern
+    meshes, origin = cfg.function(difficulty=difficulty, cfg=cfg)
+
+    # 3. Visualization Setup
+    # Add colors to the meshes based on the height for better visualization
+    colored_mesh = color_meshes_by_height(meshes)
+
+    # Add a marker for the origin (Red/Green/Blue axis)
+    origin_transform = trimesh.transformations.translation_matrix(origin)
+    origin_marker = trimesh.creation.axis(origin_size=0.5, transform=origin_transform)
+
+    # Create the scene
+    scene = trimesh.Scene([colored_mesh, origin_marker])
+
+    # 4. Save Output
+    # Ensure output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+
+    filename = "square_gap_terrain.jpg"
+    filepath = os.path.join(output_dir, filename)
+
+    # Save the scene to a png file
+    try:
+        data = scene.save_image(resolution=(640, 480))
+        with open(filepath, "wb") as f:
+            f.write(data)
+        print(f"Saved visualization to: {filepath}")
+    except Exception as e:
+        print(f"Warning: Could not save image (headless might be an issue without EGL). Error: {e}")
+
+    # 5. Display
+    if not headless:
+        print("Opening viewer window... Close window to finish script.")
+        trimesh.viewer.SceneViewer(scene=scene, caption="Square Gap Terrain", resolution=(800, 600))
+
 
 def main():
     # Create directory to dump results
@@ -421,6 +473,7 @@ def main():
     test_repeated_objects_terrain(
         difficulty=0.75, object_type="cylinder", provide_as_string=True, output_dir=output_dir, headless=headless
     )
+    test_square_gap_terrain(difficulty=0.5, output_dir=output_dir, headless=headless)
 
 
 if __name__ == "__main__":
